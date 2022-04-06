@@ -11,6 +11,7 @@ import { ProductService } from './product/product.service';
 import { UserService } from './user/user.service';
 import { Product } from './product/entities/product.entity';
 import { User } from './user/entities/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { User } from './user/entities/user.entity';
     UserModule,
     ProductModule,
     TypeOrmModule.forFeature([Product, User]),
+    AuthModule,
   ],
   controllers: [AppController, ProductController, UserController],
   providers: [AppService, ProductService, UserService],

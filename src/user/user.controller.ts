@@ -17,6 +17,13 @@ export class UserController {
 
   @Post('create')
   async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.userService.findByUsername(createUserDto.username);
+    if (user) {
+      return {
+        message: 'A user with this email already exists.',
+        status: 404,
+      };
+    }
     return this.userService.create(createUserDto);
   }
 

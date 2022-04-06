@@ -6,10 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { readFileSync } from 'fs';
 
 @Controller('product')
 export class ProductController {
@@ -41,5 +46,26 @@ export class ProductController {
   @Delete(':id/detele')
   async remove(@Param('id') id: string) {
     return this.productService.remove(+id);
+  }
+
+  @Post('upload')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: 'upload/',
+        filename: (req, file, callback) => {
+          callback(null, file.originalname);
+        },
+      }),
+    }),
+  )
+  uploadFile(@UploadedFiles() file: Express.Multer.File) {
+    // if (files[0].mimetype !== 'text/csv') {
+    //   return 'Error file';
+    // }
+
+    console.log(file);
+
+    // const csvFile = readFileSync('files/');
   }
 }
