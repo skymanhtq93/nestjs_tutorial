@@ -6,9 +6,13 @@ import { LocalStrategy } from './local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { jwtStrategy } from './jwt.strategy';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { RefreshToken } from './entities/token.entity';
+import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([RefreshToken]),
     UserModule,
     PassportModule,
     JwtModule.register({
@@ -18,5 +22,6 @@ import { jwtStrategy } from './jwt.strategy';
   ],
   providers: [AuthService, LocalStrategy, jwtStrategy],
   exports: [AuthService],
+  controllers: [AuthController],
 })
 export class AuthModule {}
